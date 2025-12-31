@@ -285,13 +285,13 @@
             <!-- Stock Check Section -->
             <div class="stock-section">
                 <h4>Check Stock Availability</h4>
-                <form class="stock-form" id="stockCheckForm">
+                <form method="POST" class="stock-form" id="stockCheckForm">
                     @csrf
                     <select name="stockApi" required>
                         <option value="">Select Store Location</option>
                         @foreach($stores as $store)
                             <option
-                                value="http://{{ env('STOCK_API_URL') }}:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
+                                value="http://192.168.1.25:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
                                 {{ $store->location }}
                             </option>
                         @endforeach
