@@ -291,7 +291,7 @@
                         <option value="">Select Store Location</option>
                         @foreach($stores as $store)
                             <option
-                                value="http://localhost:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
+                                value="http://{{ env('STOCK_API_URL') }}:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
                                 {{ $store->location }}
                             </option>
                         @endforeach
