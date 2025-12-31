@@ -11,6 +11,7 @@ class BlacklistIp
     private array $whitelist = [
         'localhost:8001',
         '127.0.0.1:8001',
+        '192.168.1.25:8001',
         '[::1]:8001',  // IPv6 localhost
     ];
 
