@@ -331,7 +331,7 @@
         document.getElementById('stockCheckForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
-            checkStock('POST', '{{ route('product.stock.check') }}', formData);
+            checkStock('POST', '/product/stock/', formData);
         });
 
         function checkStock(method, path, data) {
