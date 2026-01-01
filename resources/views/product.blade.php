@@ -291,7 +291,7 @@
                         <option value="">Select Store Location</option>
                         @foreach($stores as $store)
                             <option
-                                value="http://192.168.1.25:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
+                                value="https://https://strong-lion-shining.ngrok-free.app/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
                                 {{ $store->location }}
                             </option>
                         @endforeach
@@ -306,9 +306,9 @@
                 <a href="{{ route('landing') }}">← Return to list</a>
                 @if($nextProduct)
                                 <a href="{{ route('product.next', [
-                        'currentProductId' => $product->id,
-                        'path' => '/product?productId=' . $nextProduct->id
-                    ]) }}">
+        'currentProductId' => $product->id,
+        'path' => '/product?productId=' . $nextProduct->id
+    ]) }}">
                                     Next product →
                                 </a>
                 @endif
