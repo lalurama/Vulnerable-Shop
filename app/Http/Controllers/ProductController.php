@@ -84,7 +84,7 @@ class ProductController extends Controller
             'stockApi' => 'required'
         ]);
 
-        $stockApiUrl = $request->input('stockApi');
+        $stockApiUrl = $request->input(key: 'stockApi');
 
         try {
             // Make request to the stock API with retry mechanism
