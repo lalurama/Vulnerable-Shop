@@ -291,7 +291,7 @@
                         <option value="">Select Store Location</option>
                         @foreach($stores as $store)
                             <option
-                                value="https://localhost:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
+                                value="http://localhost:8001/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
                                 {{ $store->location }}
                             </option>
                         @endforeach
@@ -331,7 +331,7 @@
         document.getElementById('stockCheckForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(this);
-            checkStock('POST', '/product/stock/', formData);
+            checkStock('POST', '{{ route('product.stock.check') }}', formData);
         });
 
         function checkStock(method, path, data) {
