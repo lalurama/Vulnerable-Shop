@@ -12,7 +12,8 @@ class BlacklistIp
         'localhost:8001',
         '127.0.0.1:8001',
         '192.168.1.25:8001',
-        '[::1]:8001',  // IPv6 localhost
+        '[::1]:8001',
+        'strong-lion-shining.ngrok-free.app'  // IPv6 localhost
     ];
 
     /**
