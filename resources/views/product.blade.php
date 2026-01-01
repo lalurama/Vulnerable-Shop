@@ -291,7 +291,7 @@
                         <option value="">Select Store Location</option>
                         @foreach($stores as $store)
                             <option
-                                value="https://https://strong-lion-shining.ngrok-free.app/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
+                                value="https://strong-lion-shining.ngrok-free.app/api/product/stock/check?productId={{ $product->id }}&storeId={{ $store->id }}">
                                 {{ $store->location }}
                             </option>
                         @endforeach
