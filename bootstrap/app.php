@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Register middleware alias
         $middleware->alias([
-            'whitelist.api' => \App\Http\Middleware\ValidateNextProductPath::class,
+            'whitelist.api' => \App\Http\Middleware\WhitelistStockApi::class,
 
             'block.local.ip' => \App\Http\Middleware\BlacklistIp::class,
 

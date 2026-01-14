@@ -13,14 +13,14 @@ Route::get('/', [ProductController::class, 'landing'])->name('landing');
 // Product Detail Page
 Route::get('/product', [ProductController::class, 'detail'])
     ->name('product.detail');
-
+// stock check dengan whitelist
 Route::get('/product/nextProduct', [ProductController::class, 'nextProduct'])
-    ->middleware('whitelist.api')
+    // ->middleware('whitelist.api')
     ->name('product.next');
 
 // Stock Check (dengan blacklist middleware)
 Route::post('/product/stock', [ProductController::class, 'checkStock'])
-    ->middleware('block.local.ip')
+    ->middleware('whitelist.api')
     ->name('product.stock.check');
 
 // Mock API Routes (untuk aplikasi kedua di port 8001)
