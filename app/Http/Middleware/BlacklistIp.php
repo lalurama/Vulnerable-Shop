@@ -8,13 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BlacklistIp
 {
-    // private array $whitelist = [
-    //     'localhost:8001',
-    //     '127.0.0.1:8001',
-    //     '192.168.1.25:8001',
-    //     '[::1]:8001',
-    //     'strong-lion-shining.ngrok-free.app'  // IPv6 localhost
-    // ];
+    private array $whitelist = [
+        'localhost:8001',
+        '127.0.0.1:8001',
+        '192.168.1.25:8001',
+        '[::1]:8001',
+        'strong-lion-shining.ngrok-free.app'  // IPv6 localhost
+    ];
 
     /**
      * Blacklist IP local/private yang tidak boleh diakses
@@ -39,9 +39,9 @@ class BlacklistIp
             $host = $parsedUrl['host'] ?? '';
             $port = $parsedUrl['port'] ?? '';
 
-            // if ($this->isWhitelisted($host, $port)) {
-            //     return $next($request);
-            // }
+            if ($this->isWhitelisted($host, $port)) {
+                return $next($request);
+            }
             // Cek apakah host adalah IP/hostname yang di-blacklist
             if ($this->isBlacklistedHost($host)) {
                 return response()->json([
@@ -51,17 +51,17 @@ class BlacklistIp
             }
 
             // Jika hostname (bukan IP), resolve ke IP dan cek
-            // if (!filter_var($host, FILTER_VALIDATE_IP)) {
-            //     $resolvedIp = gethostbyname($host);
+            if (!filter_var($host, FILTER_VALIDATE_IP)) {
+                $resolvedIp = gethostbyname($host);
 
-            //     if ($this->isPrivateOrLocalIp($resolvedIp)) {
-            //         return response()->json([
-            //             'error' => 'Access to local/private IP addresses is blocked',
-            //             'hostname' => $host,
-            //             'resolved_ip' => $resolvedIp
-            //         ], 403);
-            //     }
-            // }
+                if ($this->isPrivateOrLocalIp($resolvedIp)) {
+                    return response()->json([
+                        'error' => 'Access to local/private IP addresses is blocked',
+                        'hostname' => $host,
+                        'resolved_ip' => $resolvedIp
+                    ], 403);
+                }
+            }
         }
 
         return $next($request);
@@ -69,31 +69,31 @@ class BlacklistIp
 
 
 
-    // private function isWhitelisted(string $host, string $port): bool
-    // {
-    //     // Format host:port
-    //     $hostWithPort = $port ? "$host:$port" : $host;
+    private function isWhitelisted(string $host, string $port): bool
+    {
+        // Format host:port
+        $hostWithPort = $port ? "$host:$port" : $host;
 
-    //     // Normalize untuk case-insensitive
-    //     $hostWithPort = strtolower($hostWithPort);
-    //     $host = strtolower($host);
+        // Normalize untuk case-insensitive
+        $hostWithPort = strtolower($hostWithPort);
+        $host = strtolower($host);
 
-    //     foreach ($this->whitelist as $whitelistedEntry) {
-    //         $whitelistedEntry = strtolower($whitelistedEntry);
+        foreach ($this->whitelist as $whitelistedEntry) {
+            $whitelistedEntry = strtolower($whitelistedEntry);
 
-    //         // Exact match dengan port
-    //         if ($hostWithPort === $whitelistedEntry) {
-    //             return true;
-    //         }
+            // Exact match dengan port
+            if ($hostWithPort === $whitelistedEntry) {
+                return true;
+            }
 
-    //         // Match host:port format
-    //         if ($port && "$host:$port" === $whitelistedEntry) {
-    //             return true;
-    //         }
-    //     }
+            // Match host:port format
+            if ($port && "$host:$port" === $whitelistedEntry) {
+                return true;
+            }
+        }
 
-    //     return false;
-    // }
+        return false;
+    }
 
     /**
      * Cek apakah host ada di blacklist
