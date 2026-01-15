@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'whitelist.api' => \App\Http\Middleware\WhitelistStockApi::class,
 
-            'block.local.ip' => \App\Http\Middleware\BlacklistIp::class,
+            'blacklistip' => \App\Http\Middleware\BlacklistIp::class,
 
         ]);
     })
