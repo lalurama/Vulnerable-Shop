@@ -8,12 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BlacklistIp
 {
+    /**
+     * Whitelist IP yang SELALU diizinkan (bypass blacklist)
+     * Khusus untuk Stock API di localhost:8001
+     */
     private array $whitelist = [
         'localhost:8001',
         '127.0.0.1:8001',
-        '192.168.1.25:8001',
-        '[::1]:8001',
-        'strong-lion-shining.ngrok-free.app'  // IPv6 localhost
+        '[::1]:8001',  // IPv6 localhost
     ];
 
     /**
@@ -26,22 +28,26 @@ class BlacklistIp
      * - 192.168.x.x (private network)
      * - localhost
      * - ::1 (IPv6 localhost)
+     *
+     * KECUALI yang ada di whitelist (localhost:8001)
      */
-
     public function handle(Request $request, Closure $next): Response
     {
         // Ambil stockApi dari request
         $stockApi = $request->input('stockApi');
 
         if ($stockApi) {
-            // Parse URL untuk ambil host
+            // Parse URL untuk ambil host dan port
             $parsedUrl = parse_url($stockApi);
             $host = $parsedUrl['host'] ?? '';
             $port = $parsedUrl['port'] ?? '';
 
+            // Cek whitelist DULU sebelum blacklist
             if ($this->isWhitelisted($host, $port)) {
+                // IP di whitelist, izinkan langsung (skip blacklist check)
                 return $next($request);
             }
+
             // Cek apakah host adalah IP/hostname yang di-blacklist
             if ($this->isBlacklistedHost($host)) {
                 return response()->json([
@@ -67,8 +73,9 @@ class BlacklistIp
         return $next($request);
     }
 
-
-
+    /**
+     * Cek apakah host:port ada di whitelist
+     */
     private function isWhitelisted(string $host, string $port): bool
     {
         // Format host:port
@@ -107,7 +114,6 @@ class BlacklistIp
             '0.0.0.0',
             '::1',
             '::ffff:127.0.0.1'
-
         ];
 
         // Cek exact match
