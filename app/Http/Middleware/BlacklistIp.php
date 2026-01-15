@@ -51,17 +51,17 @@ class BlacklistIp
             }
 
             // Jika hostname (bukan IP), resolve ke IP dan cek
-            if (!filter_var($host, FILTER_VALIDATE_IP)) {
-                $resolvedIp = gethostbyname($host);
+            // if (!filter_var($host, FILTER_VALIDATE_IP)) {
+            //     $resolvedIp = gethostbyname($host);
 
-                if ($this->isPrivateOrLocalIp($resolvedIp)) {
-                    return response()->json([
-                        'error' => 'Access to local/private IP addresses is blocked',
-                        'hostname' => $host,
-                        'resolved_ip' => $resolvedIp
-                    ], 403);
-                }
-            }
+            //     if ($this->isPrivateOrLocalIp($resolvedIp)) {
+            //         return response()->json([
+            //             'error' => 'Access to local/private IP addresses is blocked',
+            //             'hostname' => $host,
+            //             'resolved_ip' => $resolvedIp
+            //         ], 403);
+            //     }
+            // }
         }
 
         return $next($request);
