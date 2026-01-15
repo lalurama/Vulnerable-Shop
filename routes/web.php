@@ -20,7 +20,7 @@ Route::get('/product/nextProduct', [ProductController::class, 'nextProduct'])
 
 // Stock Check (dengan blacklist middleware)
 Route::post('/product/stock', [ProductController::class, 'checkStock'])
-    ->middleware('blacklistip')
+    ->middleware('whitelist.api')
     ->name('product.stock.check');
 
 // Mock API Routes (untuk aplikasi kedua di port 8001)
