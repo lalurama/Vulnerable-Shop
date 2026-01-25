@@ -9,16 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 class BlacklistIp
 {
     /**
-     * Whitelist IP yang SELALU diizinkan (bypass blacklist)
-     * Khusus untuk Stock API di localhost:8001
-     */
-    private array $whitelist = [
-        'localhost:8001',
-        '127.0.0.1:8001',
-        '[::1]:8001',  // IPv6 localhost
-    ];
-
-    /**
      * Blacklist IP local/private yang tidak boleh diakses
      *
      * Middleware ini akan memblokir request yang mencoba akses IP:
@@ -28,8 +18,6 @@ class BlacklistIp
      * - 192.168.x.x (private network)
      * - localhost
      * - ::1 (IPv6 localhost)
-     *
-     * KECUALI yang ada di whitelist (localhost:8001)
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -37,16 +25,9 @@ class BlacklistIp
         $stockApi = $request->input('stockApi');
 
         if ($stockApi) {
-            // Parse URL untuk ambil host dan port
+            // Parse URL untuk ambil host
             $parsedUrl = parse_url($stockApi);
             $host = $parsedUrl['host'] ?? '';
-            $port = $parsedUrl['port'] ?? '';
-
-            // Cek whitelist DULU sebelum blacklist
-            if ($this->isWhitelisted($host, $port)) {
-                // IP di whitelist, izinkan langsung (skip blacklist check)
-                return $next($request);
-            }
 
             // Cek apakah host adalah IP/hostname yang di-blacklist
             if ($this->isBlacklistedHost($host)) {
@@ -71,35 +52,6 @@ class BlacklistIp
         }
 
         return $next($request);
-    }
-
-    /**
-     * Cek apakah host:port ada di whitelist
-     */
-    private function isWhitelisted(string $host, string $port): bool
-    {
-        // Format host:port
-        $hostWithPort = $port ? "$host:$port" : $host;
-
-        // Normalize untuk case-insensitive
-        $hostWithPort = strtolower($hostWithPort);
-        $host = strtolower($host);
-
-        foreach ($this->whitelist as $whitelistedEntry) {
-            $whitelistedEntry = strtolower($whitelistedEntry);
-
-            // Exact match dengan port
-            if ($hostWithPort === $whitelistedEntry) {
-                return true;
-            }
-
-            // Match host:port format
-            if ($port && "$host:$port" === $whitelistedEntry) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
