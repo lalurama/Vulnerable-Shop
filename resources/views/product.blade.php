@@ -259,7 +259,7 @@
     <!-- Navbar -->
     <div class="navbar">
         <div class="container">
-            <a href="{{ route('landing') }}" class="logo">🛍️ Shop</a>
+            <a href="{{ route('landing') }}" class="logo">🛍️ Stock Hub</a>
             <nav>
                 <a href="{{ route('landing') }}">Home</a>
             </nav>
