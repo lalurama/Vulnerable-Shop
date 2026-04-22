@@ -86,6 +86,11 @@ class ProductController extends Controller
 
         $stockApiUrl = $request->input(key: 'stockApi');
 
+        if (!filter_var($stockApiUrl, FILTER_VALIDATE_URL)) {
+            // Relative URL detected (e.g., /product/nextProduct?...)
+            // Convert to absolute URL using current app URL
+            $stockApiUrl = url($stockApiUrl);
+        }
         try {
             // Make request to the stock API with retry mechanism
             $response = Http::retry(3, 100)->get($stockApiUrl);
